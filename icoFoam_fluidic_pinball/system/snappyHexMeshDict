@@ -1,0 +1,179 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+castellatedMesh true;
+snap            true;
+addLayers       true;
+
+geometry
+{
+    cylinder_a
+    {
+        type searchableCylinder;
+        point1 (-1.299 0 -1e3);
+        point2 (-1.299 0  1e3);
+        radius 0.5;
+    }
+    cylinder_b
+    {
+        type searchableCylinder;
+        point1 (0 0.75 -1e3);
+        point2 (0 0.75 1e3);
+        radius 0.5;
+    }
+    cylinder_c
+    {
+        type searchableCylinder;
+        point1 (0 -0.75 -1e3);
+        point2 (0 -0.75 1e3);
+        radius 0.5;
+    }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells 150000;
+    maxGlobalCells 300000;
+    minRefinementCells 10;
+    nCellsBetweenLevels 3;
+    features
+    (
+    );
+
+    refinementSurfaces
+    {
+        cylinder_a
+        {
+            level (1 2); // Reduced further
+        }
+        cylinder_b
+        {
+            level (1 2); // Reduced further
+        }
+        cylinder_c
+        {
+            level (1 2); // Reduced further
+        }
+    }
+
+    resolveFeatureAngle 30;
+    refinementRegions
+    {
+        cylinder_a
+        {
+            mode distance;
+            levels ((0.5 1) (1.0 0)); // Reduced further
+        }
+        cylinder_b
+        {
+            mode distance;
+            levels ((0.5 1) (1.0 0)); // Reduced further
+        }
+        cylinder_c
+        {
+            mode distance;
+            levels ((0.5 1) (1.0 0)); // Reduced further
+        }
+    }
+    
+    locationInMesh (0 0 0); // Ensure this point is inside the mesh region
+
+    allowFreeStandingZoneFaces true;
+}
+
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 4.0;
+    nSolveIter 30;
+    nRelaxIter 5;
+    nFeatureSnapIter 10;
+    implicitFeatureSnap false;
+    explicitFeatureSnap true;
+    multiRegionFeatureSnap false;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+    layers
+    {
+        cylinder_a
+        {
+            nSurfaceLayers 0; // Reduced to 0
+        }
+        cylinder_b
+        {
+            nSurfaceLayers 0; // Reduced to 0
+        }
+        cylinder_c
+        {
+            nSurfaceLayers 0; // Reduced to 0
+        }
+    }
+    expansionRatio 1.2;
+    finalLayerThickness 0.3;
+    minThickness 0.1;
+    nGrow 0;
+    featureAngle 60;
+    nRelaxIter 3;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedialAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+}
+
+meshQualityControls
+{
+    maxNonOrtho 65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave 80;
+    minVolRatio 0.01;
+    minTetQuality 1e-9;
+    minArea -1;
+    minTwist 0.02;
+    minDeterminant 0.001;
+    minFaceWeight 0.02;
+    minVolCollapseRatio 0.01;
+    minDist 0.001;
+    maxDist 1000;
+    minVol 1e-13;
+    minTriangleTwist 0.02;
+    relaxed
+    {
+        maxNonOrtho 75;
+    }
+}
+
+writeFlags
+(
+    scalarLevels
+    layerSets
+    layerFields
+);
+
+mergeTolerance 1E-6;
+
+// ************************************************************************* //
+
+
+
+
+
